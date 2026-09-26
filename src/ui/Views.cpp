@@ -217,9 +217,16 @@ void App::viewHome() {
         endCard();
         ImGui::PopStyleColor();
     }
+<<<<<<< HEAD
     if (!adbReady_) {
         ImGui::TextColored(P.warn, "ADB não encontrado/iniciado. Veja Diagnóstico.");
     }
+=======
+    std::string boot;
+    { std::lock_guard<std::mutex> lk(devMx_); boot = bootStatus_; }
+    if (!boot.empty()) ImGui::TextColored(P.warn, "%s", boot.c_str());
+    else if (!adbReady_) ImGui::TextColored(P.warn, "Iniciando ADB...");
+>>>>>>> a253bf3 (Download automático de adb/scrcpy-server na 1ª execução + build Windows (zip))
 
     // CARDS DO DISPOSITIVO
     sectionTitle("Dispositivo", "Detectado automaticamente via ADB (USB)");

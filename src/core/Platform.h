@@ -29,6 +29,8 @@ private:
 
 std::string exeDir();
 std::string appDataDir();  // %APPDATA%\Mobilador
+std::string runtimeDir();  // %APPDATA%\Mobilador\runtime (adb/scrcpy-server baixados)
+bool downloadFile(const std::string& url, const std::string& dest);
 bool fileExists(const std::string& p);
 void ensureDir(const std::string& p);
 

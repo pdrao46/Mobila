@@ -17,6 +17,7 @@
 #include <avrt.h>
 #include <timeapi.h>
 #include <direct.h>
+#include <urlmon.h>
 #else
 #include <unistd.h>
 #include <signal.h>
@@ -163,6 +164,14 @@ std::string appDataDir() {
     ensureDir(r);
     return r;
 }
+bool downloadFile(const std::string& url, const std::string& dest) {
+    std::wstring tmp = widen(dest + ".part");
+    DeleteFileW(tmp.c_str());
+    HRESULT hr = URLDownloadToFileW(nullptr, widen(url).c_str(), tmp.c_str(), 0, nullptr);
+    if (FAILED(hr)) return false;
+    DeleteFileW(widen(dest).c_str());
+    return MoveFileW(tmp.c_str(), widen(dest).c_str()) != 0;
+}
 bool fileExists(const std::string& p) { return GetFileAttributesW(widen(p).c_str()) != INVALID_FILE_ATTRIBUTES; }
 void ensureDir(const std::string& p) { CreateDirectoryW(widen(p).c_str(), nullptr); }
 
@@ -223,6 +232,12 @@ void setThreadLatencyCritical(const char* name) {
     if (h) AvSetMmThreadPriority(h, AVRT_PRIORITY_HIGH);
     else SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
     (void)name;
+}
+
+std::string runtimeDir() {
+    std::string r = appDataDir() + "\\runtime";
+    ensureDir(r);
+    return r;
 }
 
 #else  // ---------------- POSIX (desenvolvimento/testes) ----------------
@@ -311,6 +326,9 @@ std::string appDataDir() {
     ensureDir(r);
     return r;
 }
+bool downloadFile(const std::string& url, const std::string& dest) {
+    return execCapture({"curl", "-fsSL", "-o", dest, url}, 120000).exitCode == 0;
+}
 bool fileExists(const std::string& p) { struct stat s; return stat(p.c_str(), &s) == 0; }
 void ensureDir(const std::string& p) { mkdir(p.c_str(), 0755); }
 struct HostMonitor::Impl { double lastCpu = 0; std::chrono::steady_clock::time_point last; };
@@ -333,5 +351,10 @@ HostUsage HostMonitor::sample() {
 }
 void raiseTimerResolution(bool) {}
 void setThreadLatencyCritical(const char*) {}
+std::string runtimeDir() {
+    std::string r = appDataDir() + "/runtime";
+    ensureDir(r);
+    return r;
+}
 #endif
 }

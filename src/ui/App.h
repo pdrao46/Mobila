@@ -132,7 +132,12 @@ private:
     std::vector<AdbDevice> devices_;
     DeviceInfo info_;
     std::atomic<bool> infoBusy_{false};
+<<<<<<< HEAD
     std::string targetSerial_, infoTried_;
+=======
+    std::string targetSerial_, infoTried_, bootStatus_;
+    void setBoot(const std::string& s);
+>>>>>>> a253bf3 (Download automático de adb/scrcpy-server na 1ª execução + build Windows (zip))
     bool wantConnected_ = false;
     int64_t reconnectAt_ = 0;
     int reconnectTries_ = 0;

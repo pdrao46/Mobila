@@ -25,7 +25,12 @@ std::string Session::serverPath() {
 #else
     const char sep = '/';
 #endif
+<<<<<<< HEAD
     for (auto p : {exeDir() + sep + "scrcpy-server", exeDir() + sep + "server" + sep + "scrcpy-server"})
+=======
+    for (auto p : {exeDir() + sep + "scrcpy-server", exeDir() + sep + "server" + sep + "scrcpy-server",
+                   runtimeDir() + sep + "scrcpy-server"})
+>>>>>>> a253bf3 (Download automático de adb/scrcpy-server na 1ª execução + build Windows (zip))
         if (fileExists(p)) return p;
     return {};
 }

@@ -23,6 +23,7 @@ bool Adb::locate(const std::string& preferred) {
     if (!preferred.empty()) cands.push_back(preferred);
     cands.push_back(exeDir() + sep + "platform-tools" + sep + exe);
     cands.push_back(exeDir() + sep + exe);
+    cands.push_back(runtimeDir() + sep + "platform-tools" + sep + exe);
     for (auto& c : cands)
         if (fileExists(c)) { path_ = c; return true; }
     // PATH

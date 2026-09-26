@@ -3,6 +3,12 @@
 #include "../core/Clock.h"
 #include "../core/Log.h"
 #include "../stream/ControlMsg.h"
+<<<<<<< HEAD
+=======
+#ifndef MOB_SCRCPY_SERVER_VERSION
+#define MOB_SCRCPY_SERVER_VERSION "3.1"
+#endif
+>>>>>>> a253bf3 (Download automático de adb/scrcpy-server na 1ª execução + build Windows (zip))
 #include <imgui.h>
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_sdlrenderer2.h>
@@ -176,14 +182,55 @@ void App::saveSettings() {
 
 Profile* App::activeProfile() { return profiles_ ? profiles_->find(cfg_.activeProfile) : nullptr; }
 
+<<<<<<< HEAD
+=======
+void App::setBoot(const std::string& s) {
+    std::lock_guard<std::mutex> lk(devMx_);
+    bootStatus_ = s;
+    if (!s.empty()) LOGI("%s", s.c_str());
+}
+
+>>>>>>> a253bf3 (Download automático de adb/scrcpy-server na 1ª execução + build Windows (zip))
 int64_t App::eventUs(uint32_t ts) const { return tickOffsetUs_ + (int64_t)ts * 1000; }
 
 // ---------------------------------------------------------------- dispositivos
 void App::deviceWatcher() {
+<<<<<<< HEAD
     if (!adb_.locate(cfg_.adbPath)) {
         LOGE("ADB não encontrado. Coloque platform-tools ao lado do executável ou no PATH.");
         return;
     }
+=======
+    // Primeira execução: baixa componentes oficiais ausentes (Google platform-tools e scrcpy-server 3.1).
+    if (!adb_.locate(cfg_.adbPath)) {
+        setBoot("Baixando Android platform-tools (adb)...");
+#ifdef _WIN32
+        std::string zip = runtimeDir() + "\\platform-tools.zip";
+        if (downloadFile("https://dl.google.com/android/repository/platform-tools-latest-windows.zip", zip)) {
+            auto r = execCapture({"tar", "-xf", zip, "-C", runtimeDir()}, 120000);  // tar.exe nativo do Windows 10+
+            if (r.exitCode != 0) execCapture({"powershell", "-NoProfile", "-Command", "Expand-Archive -Force '" + zip + "' '" + runtimeDir() + "'"}, 120000);
+        }
+#endif
+        if (!adb_.locate(cfg_.adbPath)) {
+            setBoot("ADB indisponível: sem internet? Coloque platform-tools ao lado do Mobilador.exe");
+            LOGE("ADB não encontrado. Coloque platform-tools ao lado do executável ou no PATH.");
+            return;
+        }
+    }
+    if (Session::serverPath().empty()) {
+        setBoot("Baixando scrcpy-server " MOB_SCRCPY_SERVER_VERSION "...");
+        std::string dst = runtimeDir() +
+#ifdef _WIN32
+                          "\\scrcpy-server";
+#else
+                          "/scrcpy-server";
+#endif
+        if (!downloadFile("https://github.com/Genymobile/scrcpy/releases/download/v" MOB_SCRCPY_SERVER_VERSION
+                          "/scrcpy-server-v" MOB_SCRCPY_SERVER_VERSION, dst))
+            LOGE("falha ao baixar scrcpy-server");
+    }
+    setBoot("");
+>>>>>>> a253bf3 (Download automático de adb/scrcpy-server na 1ª execução + build Windows (zip))
     adb_.startServer();
     adbVersion_ = adb_.version();
     adbReady_ = true;
