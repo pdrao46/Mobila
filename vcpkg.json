@@ -1,0 +1,15 @@
+{
+  "name": "mobilador",
+  "version": "1.0.0",
+  "description": "MOBILADOR — Android Gaming Bridge",
+  "builtin-baseline": "11ace808cc8a3a941f386e33726b992b22ba9e5a",
+  "dependencies": [
+    "sdl2",
+    { "name": "imgui", "features": ["sdl2-binding", "sdl2-renderer-binding"] },
+    "nlohmann-json",
+    { "name": "ffmpeg", "default-features": false, "features": ["avcodec"] }
+  ],
+  "overrides": [
+    { "name": "imgui", "version": "1.91.9" }
+  ]
+}

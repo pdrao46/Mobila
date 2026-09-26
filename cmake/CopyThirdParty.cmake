@@ -1,0 +1,6 @@
+if(EXISTS "${SRC}/scrcpy-server")
+  file(COPY "${SRC}/scrcpy-server" DESTINATION "${DST}")
+endif()
+if(EXISTS "${SRC}/platform-tools")
+  file(COPY "${SRC}/platform-tools" DESTINATION "${DST}")
+endif()

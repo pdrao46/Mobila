@@ -1,0 +1,8 @@
+build/
+out/
+dist/
+vcpkg_installed/
+third_party/scrcpy-server
+third_party/platform-tools/
+*.user
+.vs/
