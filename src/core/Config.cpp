@@ -2,6 +2,7 @@
 #include "Log.h"
 #include <nlohmann/json.hpp>
 #include <fstream>
+#include <cstdio>
 
 using nlohmann::json;
 namespace mob {

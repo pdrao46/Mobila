@@ -53,6 +53,7 @@ endif()
 
 if(MSVC)
   target_compile_options(Mobilador PRIVATE /W3 /utf-8 /permissive- /MP)
+  target_link_options(Mobilador PRIVATE /MANIFEST:NO)  # manifesto próprio (DPI PerMonitorV2) no .rc
   target_link_libraries(Mobilador PRIVATE ws2_32 winmm avrt pdh psapi shell32 ole32)
 elseif(WIN32)
   target_link_libraries(Mobilador PRIVATE ws2_32 winmm avrt pdh psapi shell32 ole32)

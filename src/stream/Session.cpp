@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <chrono>
 #include <cstring>
+#include <cstdio>
+#include <cstdint>
 #include <cmath>
 #include <random>
 #include <sstream>
