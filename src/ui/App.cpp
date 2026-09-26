@@ -3,12 +3,9 @@
 #include "../core/Clock.h"
 #include "../core/Log.h"
 #include "../stream/ControlMsg.h"
-<<<<<<< HEAD
-=======
 #ifndef MOB_SCRCPY_SERVER_VERSION
 #define MOB_SCRCPY_SERVER_VERSION "3.1"
 #endif
->>>>>>> a253bf3 (Download automático de adb/scrcpy-server na 1ª execução + build Windows (zip))
 #include <imgui.h>
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_sdlrenderer2.h>
@@ -182,25 +179,16 @@ void App::saveSettings() {
 
 Profile* App::activeProfile() { return profiles_ ? profiles_->find(cfg_.activeProfile) : nullptr; }
 
-<<<<<<< HEAD
-=======
 void App::setBoot(const std::string& s) {
     std::lock_guard<std::mutex> lk(devMx_);
     bootStatus_ = s;
     if (!s.empty()) LOGI("%s", s.c_str());
 }
 
->>>>>>> a253bf3 (Download automático de adb/scrcpy-server na 1ª execução + build Windows (zip))
 int64_t App::eventUs(uint32_t ts) const { return tickOffsetUs_ + (int64_t)ts * 1000; }
 
 // ---------------------------------------------------------------- dispositivos
 void App::deviceWatcher() {
-<<<<<<< HEAD
-    if (!adb_.locate(cfg_.adbPath)) {
-        LOGE("ADB não encontrado. Coloque platform-tools ao lado do executável ou no PATH.");
-        return;
-    }
-=======
     // Primeira execução: baixa componentes oficiais ausentes (Google platform-tools e scrcpy-server 3.1).
     if (!adb_.locate(cfg_.adbPath)) {
         setBoot("Baixando Android platform-tools (adb)...");
@@ -230,7 +218,6 @@ void App::deviceWatcher() {
             LOGE("falha ao baixar scrcpy-server");
     }
     setBoot("");
->>>>>>> a253bf3 (Download automático de adb/scrcpy-server na 1ª execução + build Windows (zip))
     adb_.startServer();
     adbVersion_ = adb_.version();
     adbReady_ = true;
